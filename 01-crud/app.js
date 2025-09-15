@@ -1,10 +1,13 @@
 import express  from "express";
-
-
 import httpError from "./middleware/errorHandler.js";
 import connectDb from "./db/mongoos.js";
+import taskRoutes from "./routes/taskRoutes.js"
 
 const app = express()
+
+app.use(express.json())
+
+app.use("/task",taskRoutes)
 
 app.get("/",(req,res)=>{
     res.status(200).json("server from server");
@@ -20,8 +23,8 @@ app.use((req, res, next) => {
 
 
 app.use((error, req, res, next) => {
-  if (req.headerSent) {
-    next(error);
+  if (req.headersSent) {
+   return next(error);
   }
 
   res
@@ -48,3 +51,5 @@ async function startServer() {
     process.exit(1);
   }
 }
+
+startServer()

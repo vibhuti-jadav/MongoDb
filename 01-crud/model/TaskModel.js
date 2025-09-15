@@ -1,6 +1,7 @@
-import mongoo from "mongoos"
 
-const TaskSchema = mongoos.Schema({
+import mongoose from "mongoose";
+
+const TaskSchema = mongoose.Schema({
     task:{
         type:String,
         required:true,
@@ -13,6 +14,6 @@ const TaskSchema = mongoos.Schema({
     }
 })
 
-const TaskModel = mongoos.model("Task",TaskSchema);
+const TaskModel = mongoose.model("Task",TaskSchema);
 
 export default TaskModel;
