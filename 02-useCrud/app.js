@@ -43,15 +43,15 @@ const startserver = async()=>{
         }
         console.log("db connected")
 
-app.listen(port,()=>{
-    console.log("server running on port",port)
-})
+        app.listen(port,()=>{
+            console.log("server running on port",port)
+        })
 
-    } catch (error) {
-        
-        console.log(error.message);
-        process.exit(1)
-    }
+        } catch (error) {
+            
+            console.log(error.message);
+            process.exit(1)
+        }
 }
 
 startserver()
