@@ -15,19 +15,20 @@ const addUser = async (req,res,next)=>{
         
         const SaveUser = new User(newUser)
 
+        const token = await SaveUser.generateAuthToken()
+
         await SaveUser.save();
 
         if(!SaveUser){
             return next(new httpError("failded to create user",500))
         }
 
-        res.status(201).json({message:"user created successfully",SaveUser})
+        res.status(201).json({message:"user created successfully",SaveUser,token})
 
 
     } catch (error) {
         next (new httpError(error.message,500))
     }
-
 }
 
 const login = async (req, res, next) => {
@@ -40,10 +41,22 @@ const login = async (req, res, next) => {
       return next(new httpError("unable to login", 400));
     }
 
-    res.status(200).json({ message: "log in successfully", user });
+    res.status(200).json({ message: "log in successfully", user , token });
   } catch (error) {
     next(new httpError(error.message, 500));
   }
 };
 
-export default {login,addUser};
+const authLogin = async(req,res,next)=>{
+  try {
+      const user = req.user;
+
+      res.status(200).json({message:"user login successfully",user})
+
+  } catch (error) {
+    next(new httpError(error.message,500));
+  }
+}
+
+
+export default {login,addUser,authLogin};
