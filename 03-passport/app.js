@@ -17,7 +17,7 @@ const startServer = async ()=>{
 
         if(!connect){
             throw new Error("failed to connec db")
-        }
+        } 
 
 app.listen(port,()=>{
     console.log("server running on port",port)
