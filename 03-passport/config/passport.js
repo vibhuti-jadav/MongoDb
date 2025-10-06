@@ -1,6 +1,6 @@
-import env from "dotenv"
+import env from ".env"
 
-dotenv.config({ path:"./.dev.env"});
+env.config({ path:"./.env"});
 
 import passport from "passport";
 import passportGoogle from "passport-google-oauth20"
@@ -16,27 +16,28 @@ passport.use(
             callbackURL:"/auth/google/redirect"
         },
 
-        async (accessToken,refreshToken,Profiler,done)=>{
-            const user  = await User.findOne({googleId : Profile.id});
+         async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({ googleId: profile.id });
 
-            if(!user){
-                const newUser = await User.create({
-                    googleId:profile.id,
-                    name:profile.displayName,
-                    email:profile.email?.[0].value,
+        if (!user) {
+          const newUser = await User.create({
+            googleId: profile.id,
+            name: profile.displayName,
+            email: profile.emails?.[0].value,
+          });
 
-                })
-                if(newUser){
-                    done(null,newUser)
-                }
-                
-            }
-            else{
-                done(null,user)
-            }
+          return done(null, newUser);
         }
-    )
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
 );
+
 
 passport.serializeUser((user,done)=>{ 
     done(null,user.id)
